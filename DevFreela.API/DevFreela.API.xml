@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevFreela.API</name>
+    </assembly>
+    <members>
+        <member name="M:DevFreela.API.Controllers.ProjectsController.Get">
+            <summary>
+            API para testes de HTTP GET
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

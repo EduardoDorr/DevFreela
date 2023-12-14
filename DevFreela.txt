@@ -1,0 +1,10 @@
+Entidades:
+- Clientes/Freelancers
+- Projetos
+- Habilidades
+- Mensagem
+
+Ações:
+- Definir, Inicial e Terminar Projetos
+- Cliente e Freelancer se comunicam
+- Definir Habilidades de um Freelancer

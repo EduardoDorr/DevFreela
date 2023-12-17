@@ -1,99 +1,88 @@
-﻿using DevFreela.API.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace DevFreela.API.Controllers
+using DevFreela.Application.Services.Interfaces;
+using DevFreela.Application.Models.InputModels;
+
+namespace DevFreela.API.Controllers;
+
+[Route("api/v1/[controller]")]
+public class ProjectsController : ControllerBase
 {
-    [Route("api/projects")]
-    public class ProjectsController : ControllerBase
+    private readonly IProjectService _projectService;
+
+    public ProjectsController(IProjectService projectService)
     {
-        private readonly OpeningTimeOption _option;
-        public ProjectsController(IOptions<OpeningTimeOption> option, ExampleClass exampleClass1, ExampleClass exampleClass2)
-        {
-            _option = option.Value;
-        }
+        _projectService = projectService;
+    }
 
-        // api/projects?query=net core
-        [HttpGet]
-        public IActionResult Get(string query)
-        {
-            // Buscar todos ou filtrar
+    [HttpGet]
+    public IActionResult GetAll(int skip = 0, int take = 50)
+    {
+        var projects = _projectService.GetAll(skip, take);
 
-            return Ok();
-        }
+        return Ok(projects);
+    }
 
-        // api/projects/2
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            // Buscar o projeto
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var project = _projectService.GetById(id);
 
-            // return NotFound();
+        if (project is null)
+            return NotFound();
 
-            return Ok();
-        }
+        return Ok(project);
+    }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] CreateProjectModel createProject)
-        {
-            if (createProject.Title.Length > 50)
-            {
-                return BadRequest();
-            }
+    [HttpPost]
+    public IActionResult Create([FromBody] CreateProjectInputModel createProject)
+    {
+        var projectId = _projectService.Create(createProject);
 
-            // Cadastrar o projeto
+        return CreatedAtAction(nameof(GetById), new { id = projectId }, createProject);
+    }
 
-            return CreatedAtAction(nameof(GetById), new { id = createProject.Id }, createProject);
-        }
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, [FromBody] UpdateProjectInputModel updateProject)
+    {
+        updateProject.Id = id;
 
-        // api/projects/2
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateProjectModel updateProject)
-        {
-            if (updateProject.Description.Length > 200)
-            {
-                return BadRequest();
-            }
+        _projectService.Update(updateProject);
 
-            // Atualizo o objeto
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _projectService.Delete(id);
 
-        // api/projects/3 DELETE
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            // Buscar, se não existir, retorna NotFound
+        return NoContent();
+    }
 
-            // Remover 
+    [HttpPost("{id}/comments")]
+    public IActionResult CreateComment(int id, [FromBody] CreateCommentInputModel createComment)
+    {
+        createComment.ProjectId = id;
 
-            return NoContent();
-        }
+        _projectService.CreateComment(createComment);
 
-        // api/projects/1/comments POST
-        [HttpPost("{id}/comments")]
-        public IActionResult PostComment(int id, [FromBody] CreateCommentModel createComment)
-        {
-            return NoContent();
-        }
+        return NoContent();
+    }
 
-        // api/projects/1/start
-        [HttpPut("{id}/start")]
-        public IActionResult Start(int id)
-        {
-            return NoContent();
-        }
+    [HttpPut("{id}/start")]
+    public IActionResult Start(int id)
+    {
+        _projectService.Start(id);
 
-        // api/projects/1/finish
-        [HttpPut("{id}/finish")]
-        public IActionResult Finish(int id)
-        {
-            return NoContent();
-        }
+        return NoContent();
+    }
+
+    [HttpPut("{id}/finish")]
+    public IActionResult Finish(int id)
+    {
+        _projectService.Finish(id);
+
+        return NoContent();
     }
 }

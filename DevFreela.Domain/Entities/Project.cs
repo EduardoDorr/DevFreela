@@ -15,6 +15,9 @@ public class Project : BaseEntity
     public ProjectStatus Status { get; private set; }
     public List<ProjectComment> Comments { get; private set; }
 
+    public virtual User Client { get; private set; }
+    public virtual User Freelancer { get; private set; }
+
     public Project(string title, string description, int clientId, int freelancerId, decimal totalCost)
     {
         Title = title;
@@ -26,5 +29,39 @@ public class Project : BaseEntity
         CreatedAt = DateTime.Now;
         Status = ProjectStatus.Created;
         Comments = new List<ProjectComment>();
+    }
+
+    public void Start()
+    {
+        if (Status == ProjectStatus.Created)
+        {
+            StartedAt = DateTime.Now;
+            Status = ProjectStatus.InProgress;
+        }
+    }
+
+    public void Finish()
+    {
+        if (Status == ProjectStatus.InProgress)
+        {
+            FinishedAt = DateTime.Now;
+            Status = ProjectStatus.Finished;
+        }
+    }
+
+    public void Cancel()
+    {
+        if (Status == ProjectStatus.Created || Status == ProjectStatus.InProgress)
+        {
+            FinishedAt = DateTime.Now;
+            Status = ProjectStatus.Cancelled;
+        }
+    }
+
+    public void Update(string title, string description, decimal totalCost)
+    {
+        Title = title;
+        Description = description;
+        TotalCost = totalCost;
     }
 }

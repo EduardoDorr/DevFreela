@@ -1,32 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
 
-using DevFreela.Application.Models.InputModels;
-using DevFreela.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+using MediatR;
+
+using DevFreela.Application.Queries.Skills;
+using DevFreela.Application.Commands.Skills;
 
 namespace DevFreela.API.Controllers;
 
 [Route("api/v1/[controller]")]
 public class SkillsController : ControllerBase
 {
-    private readonly ISkillService _skillService;
+    private readonly IMediator _mediator;
 
-    public SkillsController(ISkillService skillService)
+    public SkillsController(IMediator mediator)
     {
-        _skillService = skillService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var users = _skillService.GetAll();
+        var users = await _mediator.Send(new GetSkillsQuery());
 
         return Ok(users);
     }
 
     [HttpGet("id")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var user = _skillService.GetById(id);
+        var user = await _mediator.Send(new GetSkillQuery(id));
 
         if (user is null)
             return NotFound();
@@ -35,20 +39,19 @@ public class SkillsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateSkillInputModel inputModel)
+    public async Task<IActionResult> Create([FromBody] CreateSkillCommand command)
     {
-        var skillId = _skillService.Create(inputModel);
+        var skillId = await _mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetById), new { id = skillId }, inputModel);
+        return CreatedAtAction(nameof(GetById), new { id = skillId }, command);
     }
 
-    // api/projects/2
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] UpdateSkillInputModel inputModel)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateSkillCommand command)
     {
-        inputModel.Id = id;
+        command.Id = id;
 
-        _skillService.Update(inputModel);
+        await _mediator.Send(command);
 
         return NoContent();
     }

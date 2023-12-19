@@ -26,12 +26,11 @@ public class User : BaseEntity
         FreelanceProjects = new List<Project>();
     }
 
-    public void Update(string name, string email, DateTime birthDate, bool active)
+    public void Update(string name, string email, DateTime birthDate)
     {
         Name = name;
         Email = email;
         BirthDate = birthDate;
-        Active = active;
     }
 
     public void Activate() => Active = true;

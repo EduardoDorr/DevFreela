@@ -2,9 +2,6 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using DevFreela.Application.Services.Interfaces;
-using DevFreela.Application.Services.Implementations;
-
 namespace DevFreela.Application;
 
 public static class ApplicationModule
@@ -19,10 +16,6 @@ public static class ApplicationModule
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ISkillService, SkillService>();
-        services.AddScoped<IProjectService, ProjectService>();
-
         return services;
     }
 

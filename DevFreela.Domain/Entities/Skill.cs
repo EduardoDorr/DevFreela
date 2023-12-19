@@ -7,6 +7,8 @@ public class Skill : BaseEntity
 
     public virtual ICollection<UserSkill> UserSkills { get; private set; }
 
+    protected Skill() { }
+
     public Skill(string description)
     {
         Description = description;

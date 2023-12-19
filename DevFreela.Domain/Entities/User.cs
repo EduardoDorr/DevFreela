@@ -13,6 +13,8 @@ public class User : BaseEntity
     public virtual ICollection<Project> OwnedProjects { get; private set; }
     public virtual ICollection<Project> FreelanceProjects { get; private set; }
 
+    protected User() { }
+
     public User(string name, string email, DateTime birthDate)
     {
         Name = name;

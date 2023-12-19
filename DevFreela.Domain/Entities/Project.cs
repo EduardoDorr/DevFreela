@@ -18,6 +18,8 @@ public class Project : BaseEntity
     public virtual User Client { get; private set; }
     public virtual User Freelancer { get; private set; }
 
+    protected Project() { }
+
     public Project(string title, string description, int clientId, int freelancerId, decimal totalCost)
     {
         Title = title;

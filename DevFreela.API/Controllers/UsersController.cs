@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using MediatR;
 
-using DevFreela.Application.Queries.Users;
-using DevFreela.Application.Commands.Users;
+using DevFreela.Application.Users.Queries;
+using DevFreela.Application.Users.Commands;
 
 namespace DevFreela.API.Controllers
 {

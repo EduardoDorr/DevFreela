@@ -8,6 +8,8 @@ public class UserSkill : BaseEntity
     public virtual User User { get; private set; }
     public virtual Skill Skill { get; private set; }
     
+    protected UserSkill() { }
+
     public UserSkill(int userId, int skillId)
     {
         UserId = userId;

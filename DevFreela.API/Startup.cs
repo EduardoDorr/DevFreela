@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,11 @@ public static class Startup
         services.AddApplication();
         services.AddInfrastructure(configuration);
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.WriteIndented = true;
+        });
         services.AddSwaggerGen(s =>
         {
             s.SwaggerDoc("v1", new OpenApiInfo

@@ -6,6 +6,7 @@ using Dapper;
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Repositories;
 using DevFreela.Infrastructure.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
 
@@ -34,13 +35,35 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByIdAsync(int id)
     {
-        using (var sqlConnection = new SqlConnection(_connectionString))
-        {
-            var query = "SELECT TOP 1 * FROM Users WHERE Id = @Id";
+        //using (var sqlConnection = new SqlConnection(_connectionString))
+        //{
+        //    var query = "SELECT TOP 1 * FROM Users U INNER JOIN UserSkills US ON U.Id = US.UserId WHERE U.Id = @Id";
 
-            var user = await sqlConnection.QueryFirstOrDefaultAsync<User>(query, new { Id = id });
+        //    var user = await sqlConnection.QueryFirstOrDefaultAsync<User>(query, new { Id = id });
 
-            return user;
-        }
+        //    return user;
+        //}
+
+        return await _context.Users.Include(u => u.UserSkills).SingleOrDefaultAsync(u => u.Id == id);
+    }
+
+    public void Create(User user)
+    {
+        _context.Users.Add(user);
+    }
+
+    public void Update(User user)
+    {
+        _context.Users.Update(user);
+    }
+
+    public void Delete(User user)
+    {
+        _context.Users.Remove(user);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
     }
 }

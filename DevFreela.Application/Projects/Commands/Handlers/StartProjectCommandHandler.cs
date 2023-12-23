@@ -1,30 +1,30 @@
 ﻿using MediatR;
 
-using DevFreela.Infrastructure.Persistence.Data;
-using DevFreela.Application.Projects.Commands;
+using DevFreela.Domain.Repositories;
 
 namespace DevFreela.Application.Projects.Commands.Handlers;
 
 internal sealed class StartProjectCommandHandler : IRequestHandler<StartProjectCommand, Unit>
 {
-    private readonly DevFreelaDbContext _context;
+    private readonly IProjectRepository _projectRepository;
 
-    public StartProjectCommandHandler(DevFreelaDbContext context)
+    public StartProjectCommandHandler(IProjectRepository projectRepository)
     {
-        _context = context;
+        _projectRepository = projectRepository;
     }
 
     public async Task<Unit> Handle(StartProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = _context.Projects.FirstOrDefault(x => x.Id == request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id);
 
         if (project is null)
             return Unit.Value;
 
         project.Start();
 
-        _context.Projects.Update(project);
-        await _context.SaveChangesAsync();
+        _projectRepository.Update(project);
+
+        await _projectRepository.SaveChangesAsync();
 
         return Unit.Value;
     }

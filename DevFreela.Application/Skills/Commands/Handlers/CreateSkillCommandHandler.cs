@@ -1,26 +1,26 @@
 ﻿using MediatR;
 
 using DevFreela.Domain.Entities;
-using DevFreela.Infrastructure.Persistence.Data;
-using DevFreela.Application.Skills.Commands;
+using DevFreela.Domain.Repositories;
 
 namespace DevFreela.Application.Skills.Commands.Handlers;
 
 internal sealed class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand, int>
 {
-    private readonly DevFreelaDbContext _context;
+    private readonly ISkillRepository _skillRepository;
 
-    public CreateSkillCommandHandler(DevFreelaDbContext context)
+    public CreateSkillCommandHandler(ISkillRepository skillRepository)
     {
-        _context = context;
+        _skillRepository = skillRepository;
     }
 
     public async Task<int> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
     {
         var skill = new Skill(request.Description);
 
-        _context.Skills.Add(skill);
-        await _context.SaveChangesAsync();
+        _skillRepository.Create(skill);
+
+        await _skillRepository.SaveChangesAsync();
 
         return skill.Id;
     }

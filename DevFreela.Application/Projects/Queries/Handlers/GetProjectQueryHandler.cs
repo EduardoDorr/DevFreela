@@ -17,7 +17,7 @@ internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, 
 
     public async Task<ProjectDetailsViewModel?> Handle(GetProjectQuery request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdWithDetailsAsync(request.Id);
 
         if (project is null)
             return null;

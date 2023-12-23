@@ -9,6 +9,7 @@ using DevFreela.Application.Users.Commands;
 
 namespace DevFreela.API.Controllers
 {
+    [ApiController]
     [Route("api/v1/[Controller]")]
     public class UsersController : ControllerBase
     {

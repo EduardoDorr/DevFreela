@@ -9,6 +9,7 @@ using DevFreela.Application.Skills.Commands;
 
 namespace DevFreela.API.Controllers;
 
+[ApiController]
 [Route("api/v1/[controller]")]
 public class SkillsController : ControllerBase
 {

@@ -35,7 +35,19 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task<ProjectDetailsDto?> GetByIdAsync(int id)
+    public async Task<Project?> GetByIdAsync(int id)
+    {
+        using (var sqlConnection = new SqlConnection(_connectionString))
+        {
+            var query = "SELECT * FROM Projects WHERE Id = @Id";
+
+            var project = await sqlConnection.QueryFirstOrDefaultAsync<Project>(query, new { id });
+
+            return project;
+        }
+    }
+
+    public async Task<ProjectDetailsDto?> GetByIdWithDetailsAsync(int id)
     {
         using (var sqlConnection = new SqlConnection(_connectionString))
         {
@@ -55,5 +67,30 @@ public class ProjectRepository : IProjectRepository
 
             return project;
         }
+    }
+
+    public void Create(Project project)
+    {
+        _context.Projects.Add(project);
+    }
+
+    public void Update(Project project)
+    {
+        _context.Projects.Update(project);
+    }
+
+    public void Delete(Project project)
+    {
+        _context.Projects.Remove(project);
+    }
+
+    public void CreateComment(ProjectComment comment)
+    {
+        _context.ProjectComments.Add(comment);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
     }
 }

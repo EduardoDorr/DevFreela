@@ -43,4 +43,24 @@ public class SkillRepository : ISkillRepository
             return skill;
         }
     }
+
+    public void Create(Skill skill)
+    {
+        _context.Skills.Add(skill);
+    }
+
+    public void Update(Skill skill)
+    {
+        _context.Skills.Update(skill);
+    }
+
+    public void Delete(Skill skill)
+    {
+        _context.Skills.Remove(skill);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
+    }
 }

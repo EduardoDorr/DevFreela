@@ -1,36 +1,38 @@
 ﻿using MediatR;
 
 using DevFreela.Domain.Entities;
-using DevFreela.Infrastructure.Persistence.Data;
-using DevFreela.Application.Users.Commands;
+using DevFreela.Domain.Repositories;
 
 namespace DevFreela.Application.Users.Commands.Handlers;
 
 internal sealed class AddSkillToUserCommandHandler : IRequestHandler<AddSkillToUserCommand, Unit>
 {
-    private readonly DevFreelaDbContext _context;
+    private readonly IUserRepository _userRepository;
+    private readonly ISkillRepository _skillRepository;
 
-    public AddSkillToUserCommandHandler(DevFreelaDbContext context)
+    public AddSkillToUserCommandHandler(IUserRepository userRepository, ISkillRepository skillRepository)
     {
-        _context = context;
+        _userRepository = userRepository;
+        _skillRepository = skillRepository;
     }
 
     public async Task<Unit> Handle(AddSkillToUserCommand request, CancellationToken cancellationToken)
     {
-        var user = _context.Users.FirstOrDefault(x => x.Id == request.UserId);
+        var user = await _userRepository.GetByIdAsync(request.UserId);
 
         if (user is null)
             return Unit.Value;
 
-        var skill = _context.Skills.FirstOrDefault(x => x.Id == request.SkillId);
+        var skill = await _skillRepository.GetByIdAsync(request.SkillId);
 
         if (skill is null)
             return Unit.Value;
 
         user.AddSkill(new UserSkill(request.UserId, request.SkillId));
 
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        _userRepository.Update(user);
+
+        await _userRepository.SaveChangesAsync();
 
         return Unit.Value;
     }

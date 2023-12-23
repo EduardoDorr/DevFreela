@@ -1,38 +1,107 @@
-﻿using DevFreela.API.Models;
+﻿using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
+using MediatR;
+
+using DevFreela.Application.Users.Queries;
+using DevFreela.Application.Users.Commands;
 
 namespace DevFreela.API.Controllers
 {
-    [Route("api/users")]
+    [ApiController]
+    [Authorize]
+    [Route("api/v1/[Controller]")]
     public class UsersController : ControllerBase
     {
-        public UsersController(ExampleClass exampleClass)
-        {
+        private readonly IMediator _mediator;
 
+        public UsersController(IMediator mediator)
+        {
+            _mediator = mediator;
         }
-        // api/users/1
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _mediator.Send(new GetUsersQuery());
+
+            return Ok(users);
+        }
+
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return Ok();
+            var user = await _mediator.Send(new GetUserQuery(id));
+
+            if (user is null)
+                return NotFound();
+
+            return Ok(user);
         }
 
-        // api/users
         [HttpPost]
-        public IActionResult Post([FromBody] CreateUserModel createUserModel)
+        [AllowAnonymous]
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
-            return CreatedAtAction(nameof(GetById), new { id = 1 }, createUserModel);
+            var userId = await _mediator.Send(command);
+
+            return CreatedAtAction(nameof(GetById), new { id = userId }, command);
         }
 
-        // api/users/1/login
-        [HttpPut("{id}/login")]
-        public IActionResult Login(int id, [FromBody] LoginModel login)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateUserCommand command)
         {
+            command.Id = id;
+
+            await _mediator.Send(command);
+
             return NoContent();
+        }
+
+        [HttpPut("activate/{id}")]
+        public async Task<IActionResult> Activate(int id)
+        {
+            await _mediator.Send(new ActivateUserCommand(id));
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            await _mediator.Send(new DeactivateUserCommand(id));
+
+            return NoContent();
+        }
+
+        [HttpPut("add-skill/{userId}")]
+        public async Task<IActionResult> AddSkill(int userId, int skillId)
+        {
+            await _mediator.Send(new AddSkillToUserCommand(userId, skillId));
+
+            return NoContent();
+        }
+
+        [HttpDelete("remove-skill/{userId}")]
+        public async Task<IActionResult> RemoveSkill(int userId, int skillId)
+        {
+            await _mediator.Send(new RemoveSkillFromUserCommand(userId, skillId));
+
+            return NoContent();
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            var loginUserViewModel = await _mediator.Send(command);
+
+            if (loginUserViewModel is null)
+            return BadRequest("Email or Password is Wrong!");
+
+            return Ok(loginUserViewModel);
         }
     }
 }

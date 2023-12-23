@@ -7,6 +7,8 @@ public class User : BaseEntity
     public DateTime BirthDate { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool Active { get; private set; }
+    public string Password { get; private set; }
+    public string Role { get; private set; }
 
     public virtual ICollection<UserSkill> UserSkills { get; private set; }
     public virtual ICollection<ProjectComment> Comments { get; private set; }
@@ -15,7 +17,7 @@ public class User : BaseEntity
 
     protected User() { }
 
-    public User(string name, string email, DateTime birthDate)
+    public User(string name, string email, DateTime birthDate, string password, string role)
     {
         Name = name;
         Email = email;
@@ -26,6 +28,8 @@ public class User : BaseEntity
         UserSkills = new List<UserSkill>();
         OwnedProjects = new List<Project>();
         FreelanceProjects = new List<Project>();
+        Password = password;
+        Role = role;
     }
 
     public void Update(string name, string email, DateTime birthDate)

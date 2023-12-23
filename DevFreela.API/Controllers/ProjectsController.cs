@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using MediatR;
 
@@ -10,6 +11,7 @@ using DevFreela.Application.Projects.Commands;
 namespace DevFreela.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 public class ProjectsController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> GetAll(int skip = 0, int take = 50)
     {
         var projects = await _mediator.Send(new GetProjectsQuery());
@@ -29,6 +32,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> GetById(int id)
     {
         var project = await _mediator.Send(new GetProjectQuery(id));
@@ -40,6 +44,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Create([FromBody] CreateProjectCommand command)
     {
         var projectId = await _mediator.Send(command);
@@ -48,6 +53,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateProjectCommand command)
     {
         command.Id = id;
@@ -58,6 +64,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Delete(int id)
     {
         await _mediator.Send(new DeleteProjectCommand(id));
@@ -66,6 +73,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost("{id}/comments")]
+    [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> CreateComment(int id, [FromBody] CreateCommentCommand command)
     {
         command.ProjectId = id;
@@ -76,6 +84,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}/start")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Start(int id)
     {
         await _mediator.Send(new StartProjectCommand(id));
@@ -84,6 +93,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}/finish")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Finish(int id)
     {
         await _mediator.Send(new FinishProjectCommand(id));

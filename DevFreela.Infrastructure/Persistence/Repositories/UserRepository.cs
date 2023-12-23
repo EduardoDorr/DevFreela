@@ -47,6 +47,11 @@ public class UserRepository : IUserRepository
         return await _context.Users.Include(u => u.UserSkills).SingleOrDefaultAsync(u => u.Id == id);
     }
 
+    public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        return await _context.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == password);
+    }
+
     public void Create(User user)
     {
         _context.Users.Add(user);

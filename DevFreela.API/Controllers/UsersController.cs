@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using MediatR;
 
@@ -10,6 +11,7 @@ using DevFreela.Application.Users.Commands;
 namespace DevFreela.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/[Controller]")]
     public class UsersController : ControllerBase
     {
@@ -34,12 +36,13 @@ namespace DevFreela.API.Controllers
             var user = await _mediator.Send(new GetUserQuery(id));
 
             if (user is null)
-            return NotFound();
+                return NotFound();
 
             return Ok(user);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
             var userId = await _mediator.Send(command);
@@ -87,6 +90,18 @@ namespace DevFreela.API.Controllers
             await _mediator.Send(new RemoveSkillFromUserCommand(userId, skillId));
 
             return NoContent();
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            var loginUserViewModel = await _mediator.Send(command);
+
+            if (loginUserViewModel is null)
+            return BadRequest("Email or Password is Wrong!");
+
+            return Ok(loginUserViewModel);
         }
     }
 }

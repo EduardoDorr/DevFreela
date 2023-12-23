@@ -30,6 +30,14 @@ internal class UserConfiguration : BaseEntityConfiguration<User>
                .HasColumnType("datetime")
                .IsRequired();
 
+        builder.Property(b => b.Password)
+               .HasMaxLength(100)
+               .IsRequired();
+
+        builder.Property(b => b.Role)
+               .HasMaxLength(25)
+               .IsRequired();
+
         builder.HasMany(b => b.UserSkills)
                .WithOne(u => u.User)
                .HasForeignKey(b => b.UserId);

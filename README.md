@@ -2,7 +2,7 @@
 
 Projeto desenvolvido durante o curso ***Formação ASP.NET Core*** do **LuisDev**.
 
-O projeto foi desenvolvido como uma WebAPI em .NET 6, utilizando tecnologias como:
+O projeto foi desenvolvido como uma WebAPI em .NET 7, utilizando tecnologias como:
 
 - 🛠️ Swagger
 - 🛠️ Clean Architecture

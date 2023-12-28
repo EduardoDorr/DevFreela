@@ -2,11 +2,10 @@
 
 using DevFreela.Domain.Repositories;
 using DevFreela.Application.Projects.Models;
-using DevFreela.Application.Projects.Queries;
 
 namespace DevFreela.Application.Projects.Queries.Handlers;
 
-internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, IEnumerable<ProjectViewModel>>
+public sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, IEnumerable<ProjectViewModel>>
 {
     private readonly IProjectRepository _projectRepository;
 

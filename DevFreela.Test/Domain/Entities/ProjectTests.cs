@@ -75,6 +75,22 @@ public class ProjectTests
         Assert.Null(project.StartedAt);
     }
 
+    [Fact]
+    public void AFinishedProject_Cancelled_FinishDateMustBeNotNullAndProjectStatusMustBeFinished()
+    {
+        // Arrange
+        var project = CreateProject();
+        project.Start();
+        project.Finish();
+
+        // Act
+        project.Cancel();
+
+        // Assert
+        Assert.Equal(ProjectStatus.Finished, project.Status);
+        Assert.NotNull(project.FinishedAt);
+    }
+
     private static Project CreateProject()
     {
         return new Project("Title1", "Description1", 1, 2, 1000);

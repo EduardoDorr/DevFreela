@@ -12,6 +12,7 @@ O projeto foi desenvolvido como uma WebAPI em .NET 7, utilizando tecnologias com
 - 🛠️ CQRS
 - 🛠️ MediatR
 - 🛠️ JWT (Json Web Token)
+- 🛠️ xUnit e NSubstitute
 
 A API é o backend de uma aplicação gerenciamento de projetos. Contendo as seguintes funções:
 
@@ -60,3 +61,8 @@ O Mediator é um padrão de projeto Comportamental criado pelo GoF, que nos ajud
 ### 📀 Json Web Token - JWT
 
 JWT (JSON Web Token) é um método padrão da indústria para realizar autenticação entre duas partes por meio de um token assinado que autentica uma requisição web. Esse token é um código em Base64 que armazena objetos JSON com os dados que permitem a autenticação da requisição.
+
+---
+### 📀 xUnit e NSubstitute
+
+***xUnit*** é um framework de teste para a plataforma .NET, projetado para oferecer uma experiência de desenvolvimento de testes simples e eficaz, facilitando a criação e execução de testes unitários e promovendo boas práticas de teste e integração com diversas ferramentas do ecossistema .NET. O ***NSubstitute*** é uma biblioteca de mocking que simplifica a criação de objetos fictícios (mocks) durante testes unitários. Ele oferece uma sintaxe fluente e intuitiva para configurar comportamentos de métodos e verificar interações com esses objetos fictícios, permitindo simular comportamentos de dependências externas, facilitando a criação de testes focados e livres de efeitos colaterais indesejados.

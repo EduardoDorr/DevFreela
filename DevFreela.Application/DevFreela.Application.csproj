@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DevFreela.Infrastructure\DevFreela.Infrastructure.csproj" />
+    <ProjectReference Include="..\DevFreela.Domain\DevFreela.Domain.csproj" />
   </ItemGroup>
 
 </Project>

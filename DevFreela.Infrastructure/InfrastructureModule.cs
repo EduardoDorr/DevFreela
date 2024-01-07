@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using DevFreela.Domain.Services;
 using DevFreela.Domain.Repositories;
 using DevFreela.Infrastructure.Auth;
+using DevFreela.Infrastructure.Payment;
+using DevFreela.Infrastructure.Consumers;
+using DevFreela.Infrastructure.MessageBus;
 using DevFreela.Infrastructure.Persistence.Data;
 using DevFreela.Infrastructure.Persistence.Repositories;
 
@@ -38,6 +41,9 @@ public static class InfrastructureModule
         services.AddTransient<IProjectRepository, ProjectRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ISkillRepository, SkillRepository>();
+        services.AddTransient<IPaymentService, PaymentService>();
+        services.AddTransient<IMessageBusService, MessageBusService>();
+        services.AddHostedService<PaymentApprovedConsumer>();
 
         return services;
     }

@@ -7,6 +7,8 @@ using MediatR;
 
 using DevFreela.Application.Projects.Queries;
 using DevFreela.Application.Projects.Commands;
+using DevFreela.Domain.Dtos;
+using DevFreela.Application.Payments.Models;
 
 namespace DevFreela.API.Controllers;
 
@@ -94,10 +96,21 @@ public class ProjectsController : ControllerBase
 
     [HttpPut("{id}/finish")]
     [Authorize(Roles = "client")]
-    public async Task<IActionResult> Finish(int id)
+    public async Task<IActionResult> Finish(int id, [FromBody] PaymentInfoInputModel paymentInfoInputModel)
     {
-        await _mediator.Send(new FinishProjectCommand(id));
+        var command =
+            new FinishProjectCommand(id,
+                                     paymentInfoInputModel.CreditCardNumber,
+                                     paymentInfoInputModel.Cvv,
+                                     paymentInfoInputModel.ExpiresAt,
+                                     paymentInfoInputModel.FullName,
+                                     paymentInfoInputModel.Amount);
 
-        return NoContent();
+        var result = await _mediator.Send(command);
+
+        if (!result)
+            return BadRequest();
+
+        return Accepted();
     }
 }

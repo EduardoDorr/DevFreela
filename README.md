@@ -13,6 +13,7 @@ O projeto foi desenvolvido como uma WebAPI em .NET 7, utilizando tecnologias com
 - 🛠️ MediatR
 - 🛠️ JWT (Json Web Token)
 - 🛠️ xUnit e NSubstitute
+- 🛠️ Mensageria com RabbitMQ
 
 A API é o backend de uma aplicação gerenciamento de projetos. Contendo as seguintes funções:
 
@@ -66,3 +67,10 @@ JWT (JSON Web Token) é um método padrão da indústria para realizar autentica
 ### 📀 xUnit e NSubstitute
 
 ***xUnit*** é um framework de teste para a plataforma .NET, projetado para oferecer uma experiência de desenvolvimento de testes simples e eficaz, facilitando a criação e execução de testes unitários e promovendo boas práticas de teste e integração com diversas ferramentas do ecossistema .NET. O ***NSubstitute*** é uma biblioteca de mocking que simplifica a criação de objetos fictícios (mocks) durante testes unitários. Ele oferece uma sintaxe fluente e intuitiva para configurar comportamentos de métodos e verificar interações com esses objetos fictícios, permitindo simular comportamentos de dependências externas, facilitando a criação de testes focados e livres de efeitos colaterais indesejados.
+
+---
+### 📀 Mensageria com RabbitMQ
+
+***Mensageria*** consiste na utilização de mensagens para estabelecer a comunicação síncrona ou assíncrona entre aplicações. Em mensageria, uma mensagem pode ser definida como uma estrutura de dados composta por meta-dados como host de origem/destino, fila de destino, etc, além de dados fornecidos pela aplicação, por exemplo os dados de um cliente a ser cadastrado.
+
+***RabbitMQ*** é um servidor de mensageria de código aberto (open source) desenvolvido em Erlang, implementado para suportar mensagens em um protocolo denominado Advanced Message Queuing Protocol (AMQP). Ele possibilita lidar com o tráfego de mensagens de forma rápida e confiável, além de ser compatível com diversas linguagens de programação, possuir interface de administração nativa e ser multiplataforma.

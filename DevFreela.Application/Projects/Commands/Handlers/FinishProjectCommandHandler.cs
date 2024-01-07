@@ -1,31 +1,38 @@
 ﻿using MediatR;
 
+using DevFreela.Domain.Dtos;
+using DevFreela.Domain.Services;
 using DevFreela.Domain.Repositories;
 
 namespace DevFreela.Application.Projects.Commands.Handlers;
 
-internal sealed class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, Unit>
+internal sealed class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
 {
     private readonly IProjectRepository _projectRepository;
+    private readonly IPaymentService _paymentService;
 
-    public FinishProjectCommandHandler(IProjectRepository projectRepository)
+    public FinishProjectCommandHandler(IProjectRepository projectRepository, IPaymentService paymentService)
     {
         _projectRepository = projectRepository;
+        _paymentService = paymentService;
     }
 
-    public async Task<Unit> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.Id);
 
         if (project is null)
-            return Unit.Value;
+            return false;
 
-        project.Finish();
+        var paymentInfoDto =
+            new PaymentInfoDto(request.Id, request.CreditCardNumber, request.Cvv, request.ExpiresAt, request.FullName, request.Amount);
+
+        _paymentService.ProcessPayment(paymentInfoDto);
+
+        project.SetPaymentPending();
 
         _projectRepository.Update(project);
 
-        await _projectRepository.SaveChangesAsync();
-
-        return Unit.Value;
+        return await _projectRepository.SaveChangesAsync();
     }
 }

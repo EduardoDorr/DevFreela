@@ -20,6 +20,8 @@ public static class Startup
         services.AddApplication();
         services.AddInfrastructure(configuration);
 
+        services.AddHttpClient();
+
         services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

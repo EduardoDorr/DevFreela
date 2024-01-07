@@ -33,6 +33,13 @@ public class Project : BaseEntity
         Comments = new List<ProjectComment>();
     }
 
+    public void Update(string title, string description, decimal totalCost)
+    {
+        Title = title;
+        Description = description;
+        TotalCost = totalCost;
+    }
+
     public void Start()
     {
         if (Status == ProjectStatus.Created)
@@ -44,7 +51,7 @@ public class Project : BaseEntity
 
     public void Finish()
     {
-        if (Status == ProjectStatus.InProgress)
+        if (Status == ProjectStatus.PaymentPending)
         {
             FinishedAt = DateTime.Now;
             Status = ProjectStatus.Finished;
@@ -60,10 +67,9 @@ public class Project : BaseEntity
         }
     }
 
-    public void Update(string title, string description, decimal totalCost)
+    public void SetPaymentPending()
     {
-        Title = title;
-        Description = description;
-        TotalCost = totalCost;
+        Status = ProjectStatus.PaymentPending;
+        FinishedAt = null;
     }
 }

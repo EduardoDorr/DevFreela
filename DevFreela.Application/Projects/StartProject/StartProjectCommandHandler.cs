@@ -24,7 +24,7 @@ internal sealed class StartProjectCommandHandler : IRequestHandler<StartProjectC
 
         _unitOfWork.Projects.Update(project);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Unit.Value;
     }

@@ -20,7 +20,7 @@ internal sealed class CreateCommentCommandHanlder : IRequestHandler<CreateCommen
 
         _unitOfWork.Projects.CreateComment(comment);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Unit.Value;
     }

@@ -25,7 +25,7 @@ internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserComma
 
         _unitOfWork.Users.Create(user);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return user.Id;
     }

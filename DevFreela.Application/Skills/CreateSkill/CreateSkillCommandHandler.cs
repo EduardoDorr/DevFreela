@@ -20,7 +20,7 @@ internal sealed class CreateSkillCommandHandler : IRequestHandler<CreateSkillCom
 
         _unitOfWork.Skills.Create(skill);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return skill.Id;
     }

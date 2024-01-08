@@ -20,7 +20,7 @@ public sealed class CreateProjectCommandHandler : IRequestHandler<CreateProjectC
 
         _unitOfWork.Projects.Create(project);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return project.Id;
     }

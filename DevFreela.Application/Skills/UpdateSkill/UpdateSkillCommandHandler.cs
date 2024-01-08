@@ -24,7 +24,7 @@ internal sealed class UpdateSkillCommandHandler : IRequestHandler<UpdateSkillCom
 
         _unitOfWork.Skills.Update(skill);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Unit.Value;
     }

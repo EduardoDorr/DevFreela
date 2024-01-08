@@ -24,7 +24,7 @@ internal sealed class DeactivateUserCommandHandler : IRequestHandler<DeactivateU
 
         _unitOfWork.Users.Update(user);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Unit.Value;
     }

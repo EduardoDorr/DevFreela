@@ -1,4 +1,6 @@
-﻿using DevFreela.Domain.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+using DevFreela.Domain.Repositories;
 using DevFreela.Infrastructure.Persistence.Data;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
@@ -10,6 +12,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public ISkillRepository Skills { get; }
 
     private readonly DevFreelaDbContext _dbContext;
+    private IDbContextTransaction _transaction;
 
     public UnitOfWork(
         DevFreelaDbContext dbContext,
@@ -23,9 +26,27 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         Skills = skills;
     }
 
-    public async Task<int> SaveChangesAsync()
+    public async Task<int> CompleteAsync()
     {
         return await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        _transaction = await _dbContext.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitAsync()
+    {
+        try
+        {
+            await _transaction.CommitAsync();
+        }
+        catch
+        {
+            await _transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public void Dispose()

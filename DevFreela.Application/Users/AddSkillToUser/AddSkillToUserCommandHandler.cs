@@ -30,7 +30,7 @@ internal sealed class AddSkillToUserCommandHandler : IRequestHandler<AddSkillToU
 
         _unitOfWork.Users.Update(user);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Unit.Value;
     }

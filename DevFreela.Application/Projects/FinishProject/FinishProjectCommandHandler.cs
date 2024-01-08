@@ -33,6 +33,6 @@ internal sealed class FinishProjectCommandHandler : IRequestHandler<FinishProjec
 
         _unitOfWork.Projects.Update(project);
 
-        return await _unitOfWork.SaveChangesAsync() > 0;
+        return await _unitOfWork.CompleteAsync() > 0;
     }
 }

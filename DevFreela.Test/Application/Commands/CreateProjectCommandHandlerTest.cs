@@ -11,7 +11,7 @@ public class CreateProjectCommandHandlerTest
     public async Task InputDataIsOk_Executed_ReturnProjectId()
     {
         // Arrange
-        var projectRepositorySubstitute = Substitute.For<IProjectRepository>();
+        var projectRepositorySubstitute = Substitute.For<IUnitOfWork>();
 
         var createProjectCommand = new CreateProjectCommand("Title1", "Description1", 1, 2, 1000);
 
@@ -23,6 +23,6 @@ public class CreateProjectCommandHandlerTest
         //Assert
         Assert.True(projectId >= 0);
 
-        projectRepositorySubstitute.Received(Quantity.Exactly(1)).Create(Arg.Any<Project>());
+        projectRepositorySubstitute.Received(Quantity.Exactly(1)).Projects.Create(Arg.Any<Project>());
     }
 }

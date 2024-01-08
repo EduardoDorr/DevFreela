@@ -1,14 +1,17 @@
 ﻿using System.Text;
 
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 using Dapper;
 
 using DevFreela.Domain.Dtos;
+using DevFreela.Domain.Models;
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Repositories;
 using DevFreela.Infrastructure.Persistence.Data;
+using DevFreela.Infrastructure.Persistence.Extensions;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
 
@@ -23,16 +26,18 @@ public class ProjectRepository : IProjectRepository
         _connectionString = configuration.GetConnectionString("DevFreela");
     }
 
-    public async Task<IEnumerable<Project>> GetAllAsync()
+    public async Task<PaginationResult<Project>> GetAllAsync(string query, int page = 1, int pageSize = 2)
     {
-        using (var sqlConnection = new SqlConnection(_connectionString))
+        IQueryable<Project> projects = _context.Projects;
+
+        if (!string.IsNullOrWhiteSpace(query))
         {
-            var query = "SELECT * FROM Projects";
-
-            var projects = await sqlConnection.QueryAsync<Project>(query);
-
-            return projects;
+            projects.Where(p =>
+                p.Title.Contains(query) ||
+                p.Description.Contains(query));
         }
+
+        return await projects.GetPaged(page, pageSize);
     }
 
     public async Task<Project?> GetByIdAsync(int id)

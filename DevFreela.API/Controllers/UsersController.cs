@@ -5,8 +5,15 @@ using Microsoft.AspNetCore.Authorization;
 
 using MediatR;
 
-using DevFreela.Application.Users.Queries;
-using DevFreela.Application.Users.Commands;
+using DevFreela.Application.Users.GetUser;
+using DevFreela.Application.Users.GetUsers;
+using DevFreela.Application.Users.LoginUser;
+using DevFreela.Application.Users.UpdateUser;
+using DevFreela.Application.Users.CreateUser;
+using DevFreela.Application.Users.ActivateUser;
+using DevFreela.Application.Users.DeactivateUser;
+using DevFreela.Application.Users.AddSkillToUser;
+using DevFreela.Application.Users.RemoveSkillFromUser;
 
 namespace DevFreela.API.Controllers
 {

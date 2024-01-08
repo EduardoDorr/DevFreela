@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using MediatR;
-
-using DevFreela.Application.Projects.Queries;
-using DevFreela.Application.Projects.Commands;
-using DevFreela.Domain.Dtos;
-using DevFreela.Application.Payments.Models;
+using DevFreela.Application.Projects.GetProject;
+using DevFreela.Application.Projects.GetProjects;
+using DevFreela.Application.Projects.StartProject;
+using DevFreela.Application.Projects.CreateComment;
+using DevFreela.Application.Projects.CreateProject;
+using DevFreela.Application.Projects.UpdateProject;
+using DevFreela.Application.Projects.FinishProject;
+using DevFreela.Application.Projects.DeleteProject;
 
 namespace DevFreela.API.Controllers;
 
@@ -26,9 +29,9 @@ public class ProjectsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "client, freelancer")]
-    public async Task<IActionResult> GetAll(int skip = 0, int take = 50)
+    public async Task<IActionResult> GetAll([FromQuery] GetProjectsQuery query)
     {
-        var projects = await _mediator.Send(new GetProjectsQuery());
+        var projects = await _mediator.Send(query);
 
         return Ok(projects);
     }

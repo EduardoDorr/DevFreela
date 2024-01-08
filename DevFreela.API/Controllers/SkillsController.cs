@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 using MediatR;
 
-using DevFreela.Application.Skills.Queries;
-using DevFreela.Application.Skills.Commands;
+
+using DevFreela.Application.Skills.GetSkill;
+using DevFreela.Application.Skills.GetSkills;
+using DevFreela.Application.Skills.UpdateSkill;
+using DevFreela.Application.Skills.CreateSkill;
 
 namespace DevFreela.API.Controllers;
 

@@ -1,7 +1,7 @@
 ﻿using DevFreela.Domain.Entities;
 using DevFreela.Domain.Repositories;
-using DevFreela.Application.Projects.Commands;
-using DevFreela.Application.Projects.Commands.Handlers;
+
+using DevFreela.Application.Projects.CreateProject;
 
 namespace DevFreela.UnitTests.Application.Commands;
 

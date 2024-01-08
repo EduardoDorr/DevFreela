@@ -8,8 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using DevFreela.Application.Payments.Commands;
 
+using DevFreela.Application.Payments.PaymentApproved;
 
 namespace DevFreela.Infrastructure.Consumers;
 

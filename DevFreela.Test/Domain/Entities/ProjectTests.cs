@@ -32,11 +32,27 @@ public class ProjectTests
     }
 
     [Fact]
-    public void AInProgressProject_Finished_FinishDateMustBeNotNullAndProjectStatusMustBeFinished()
+    public void AInProgressProject_PendingPayment_FinishDateMustBeNullAndProjectStatusMustBePendingPayment()
     {
         // Arrange
         var project = CreateProject();
         project.Start();
+
+        // Act
+        project.SetPaymentPending();
+
+        // Assert
+        Assert.Equal(ProjectStatus.PaymentPending, project.Status);
+        Assert.Null(project.FinishedAt);
+    }
+
+    [Fact]
+    public void APendingPaymentProject_Finished_FinishDateMustBeNotNullAndProjectStatusMustBeFinished()
+    {
+        // Arrange
+        var project = CreateProject();
+        project.Start();
+        project.SetPaymentPending();
 
         // Act
         project.Finish();
@@ -81,6 +97,7 @@ public class ProjectTests
         // Arrange
         var project = CreateProject();
         project.Start();
+        project.SetPaymentPending();
         project.Finish();
 
         // Act

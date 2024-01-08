@@ -1,4 +1,4 @@
-﻿namespace DevFreela.Domain.Services;
+﻿namespace DevFreela.Infrastructure.MessageBus;
 
 public interface IMessageBusService
 {

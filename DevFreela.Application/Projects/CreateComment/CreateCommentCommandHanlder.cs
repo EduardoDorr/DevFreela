@@ -7,20 +7,20 @@ namespace DevFreela.Application.Projects.CreateComment;
 
 internal sealed class CreateCommentCommandHanlder : IRequestHandler<CreateCommentCommand, Unit>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateCommentCommandHanlder(IProjectRepository projectRepository)
+    public CreateCommentCommandHanlder(IUnitOfWork unitOfWork)
     {
-        _projectRepository = projectRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
     {
         var comment = new ProjectComment(request.Content, request.ProjectId, request.UserId);
 
-        _projectRepository.CreateComment(comment);
+        _unitOfWork.Projects.CreateComment(comment);
 
-        await _projectRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

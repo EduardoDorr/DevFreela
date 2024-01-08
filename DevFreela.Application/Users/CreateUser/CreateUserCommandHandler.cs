@@ -8,12 +8,12 @@ namespace DevFreela.Application.Users.CreateUser;
 
 internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IAuthService _authService;
 
-    public CreateUserCommandHandler(IUserRepository userRepository, IAuthService authService)
+    public CreateUserCommandHandler(IUnitOfWork unitOfWork, IAuthService authService)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
         _authService = authService;
     }
 
@@ -23,9 +23,9 @@ internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserComma
 
         var user = new User(request.Name, request.Email, request.BirthDate, passwordHash, request.Role);
 
-        _userRepository.Create(user);
+        _unitOfWork.Users.Create(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return user.Id;
     }

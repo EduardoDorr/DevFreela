@@ -7,20 +7,20 @@ namespace DevFreela.Application.Skills.CreateSkill;
 
 internal sealed class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand, int>
 {
-    private readonly ISkillRepository _skillRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateSkillCommandHandler(ISkillRepository skillRepository)
+    public CreateSkillCommandHandler(IUnitOfWork unitOfWork)
     {
-        _skillRepository = skillRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<int> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
     {
         var skill = new Skill(request.Description);
 
-        _skillRepository.Create(skill);
+        _unitOfWork.Skills.Create(skill);
 
-        await _skillRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return skill.Id;
     }

@@ -6,25 +6,25 @@ namespace DevFreela.Application.Users.ActivateUser;
 
 internal sealed class ActivateUserCommandHandler : IRequestHandler<ActivateUserCommand, Unit>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ActivateUserCommandHandler(IUserRepository userRepository)
+    public ActivateUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
 
         if (user is null)
             return Unit.Value;
 
         user.Activate();
 
-        _userRepository.Update(user);
+        _unitOfWork.Users.Update(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

@@ -19,7 +19,11 @@ public static class InfrastructureModule
     {
         services.AddDbContexts(configuration)
                 .AddRepositories()
-                .AddServices();
+                .AddUnitOfWork()
+                .AddServices()
+                .AddMessageBus()
+                .AddAuthorization()
+                .AddHostedServices();
 
         return services;
     }
@@ -38,19 +42,44 @@ public static class InfrastructureModule
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddTransient<IProjectRepository, ProjectRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ISkillRepository, SkillRepository>();
-        services.AddTransient<IPaymentService, PaymentService>();
-        services.AddTransient<IMessageBusService, MessageBusService>();
-        services.AddHostedService<PaymentApprovedConsumer>();
+        services.AddTransient<IProjectRepository, ProjectRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+    {
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddTransient<IPaymentService, PaymentService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthorization(this IServiceCollection services)
+    {
         services.AddTransient<IAuthService, AuthService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddMessageBus(this IServiceCollection services)
+    {
+        services.AddTransient<IMessageBusService, MessageBusService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<PaymentApprovedConsumer>();
 
         return services;
     }

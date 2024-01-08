@@ -6,25 +6,25 @@ namespace DevFreela.Application.Skills.UpdateSkill;
 
 internal sealed class UpdateSkillCommandHandler : IRequestHandler<UpdateSkillCommand, Unit>
 {
-    private readonly ISkillRepository _skillRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateSkillCommandHandler(ISkillRepository skillRepository)
+    public UpdateSkillCommandHandler(IUnitOfWork unitOfWork)
     {
-        _skillRepository = skillRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(UpdateSkillCommand request, CancellationToken cancellationToken)
     {
-        var skill = await _skillRepository.GetByIdAsync(request.Id);
+        var skill = await _unitOfWork.Skills.GetByIdAsync(request.Id);
 
         if (skill is null)
             return Unit.Value;
 
         skill.Update(request.Description);
 
-        _skillRepository.Update(skill);
+        _unitOfWork.Skills.Update(skill);
 
-        await _skillRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

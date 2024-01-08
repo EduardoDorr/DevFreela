@@ -6,25 +6,25 @@ namespace DevFreela.Application.Projects.DeleteProject;
 
 internal sealed class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand, Unit>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProjectCommandHandler(IProjectRepository projectRepository)
+    public DeleteProjectCommandHandler(IUnitOfWork unitOfWork)
     {
-        _projectRepository = projectRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _unitOfWork.Projects.GetByIdAsync(request.Id);
 
         if (project is null)
             return Unit.Value;
 
         project.Cancel();
 
-        _projectRepository.Update(project);
+        _unitOfWork.Projects.Update(project);
 
-        await _projectRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

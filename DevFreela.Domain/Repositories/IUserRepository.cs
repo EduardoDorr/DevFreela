@@ -10,5 +10,4 @@ public interface IUserRepository
     void Create(User user);
     void Update(User user);
     void Delete(User user);
-    Task<bool> SaveChangesAsync();
 }

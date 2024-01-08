@@ -8,18 +8,18 @@ namespace DevFreela.Application.Projects.FinishProject;
 
 internal sealed class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IPaymentService _paymentService;
 
-    public FinishProjectCommandHandler(IProjectRepository projectRepository, IPaymentService paymentService)
+    public FinishProjectCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService)
     {
-        _projectRepository = projectRepository;
+        _unitOfWork = unitOfWork;
         _paymentService = paymentService;
     }
 
     public async Task<bool> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _unitOfWork.Projects.GetByIdAsync(request.Id);
 
         if (project is null)
             return false;
@@ -31,8 +31,8 @@ internal sealed class FinishProjectCommandHandler : IRequestHandler<FinishProjec
 
         project.SetPaymentPending();
 
-        _projectRepository.Update(project);
+        _unitOfWork.Projects.Update(project);
 
-        return await _projectRepository.SaveChangesAsync();
+        return await _unitOfWork.SaveChangesAsync() > 0;
     }
 }

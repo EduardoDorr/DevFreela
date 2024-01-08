@@ -66,9 +66,4 @@ public class UserRepository : IUserRepository
     {
         _context.Users.Remove(user);
     }
-
-    public async Task<bool> SaveChangesAsync()
-    {
-        return await _context.SaveChangesAsync() > 0;
-    }
 }

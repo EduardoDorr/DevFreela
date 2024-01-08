@@ -7,32 +7,30 @@ namespace DevFreela.Application.Users.AddSkillToUser;
 
 internal sealed class AddSkillToUserCommandHandler : IRequestHandler<AddSkillToUserCommand, Unit>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ISkillRepository _skillRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AddSkillToUserCommandHandler(IUserRepository userRepository, ISkillRepository skillRepository)
+    public AddSkillToUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
-        _skillRepository = skillRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(AddSkillToUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
 
         if (user is null)
             return Unit.Value;
 
-        var skill = await _skillRepository.GetByIdAsync(request.SkillId);
+        var skill = await _unitOfWork.Skills.GetByIdAsync(request.SkillId);
 
         if (skill is null)
             return Unit.Value;
 
         user.AddSkill(new UserSkill(request.UserId, request.SkillId));
 
-        _userRepository.Update(user);
+        _unitOfWork.Users.Update(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

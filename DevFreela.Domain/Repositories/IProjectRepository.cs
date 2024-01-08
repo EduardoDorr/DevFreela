@@ -12,6 +12,5 @@ public interface IProjectRepository
     void Create(Project project);
     void Update(Project project);
     void Delete(Project project);
-    Task<bool> SaveChangesAsync();
     void CreateComment(ProjectComment comment);
 }

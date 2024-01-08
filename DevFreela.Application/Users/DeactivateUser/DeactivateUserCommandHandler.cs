@@ -6,25 +6,25 @@ namespace DevFreela.Application.Users.DeactivateUser;
 
 internal sealed class DeactivateUserCommandHandler : IRequestHandler<DeactivateUserCommand, Unit>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeactivateUserCommandHandler(IUserRepository userRepository)
+    public DeactivateUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(DeactivateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
 
         if (user is null)
             return Unit.Value;
 
         user.Deactivate();
 
-        _userRepository.Update(user);
+        _unitOfWork.Users.Update(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

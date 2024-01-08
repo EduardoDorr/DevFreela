@@ -6,16 +6,16 @@ namespace DevFreela.Application.Users.RemoveSkillFromUser;
 
 internal sealed class RemoveSkillFromUserCommandHandler : IRequestHandler<RemoveSkillFromUserCommand, Unit>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RemoveSkillFromUserCommandHandler(IUserRepository userRepository)
+    public RemoveSkillFromUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(RemoveSkillFromUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
 
         if (user is null)
             return Unit.Value;
@@ -27,9 +27,9 @@ internal sealed class RemoveSkillFromUserCommandHandler : IRequestHandler<Remove
 
         user.RemoveSkill(skill);
 
-        _userRepository.Update(user);
+        _unitOfWork.Users.Update(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

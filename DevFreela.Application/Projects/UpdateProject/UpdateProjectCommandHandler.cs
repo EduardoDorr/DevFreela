@@ -6,25 +6,25 @@ namespace DevFreela.Application.Projects.UpdateProject;
 
 internal sealed class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, Unit>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateProjectCommandHandler(IProjectRepository projectRepository)
+    public UpdateProjectCommandHandler(IUnitOfWork unitOfWork)
     {
-        _projectRepository = projectRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _unitOfWork.Projects.GetByIdAsync(request.Id);
 
         if (project is null)
             return Unit.Value;
 
         project.Update(request.Title, request.Description, request.TotalCost);
 
-        _projectRepository.Update(project);
+        _unitOfWork.Projects.Update(project);
 
-        await _projectRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

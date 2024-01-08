@@ -6,25 +6,25 @@ namespace DevFreela.Application.Users.UpdateUser;
 
 internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateUserCommandHandler(IUserRepository userRepository)
+    public UpdateUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
 
         if (user is null)
             return Unit.Value;
 
         user.Update(request.Name, request.Email, request.BirthDate);
 
-        _userRepository.Update(user);
+        _unitOfWork.Users.Update(user);
 
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

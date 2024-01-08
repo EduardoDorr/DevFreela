@@ -6,24 +6,24 @@ namespace DevFreela.Application.Payments.PaymentApproved;
 
 public class PaymentApprovedCommandHandler : IRequestHandler<PaymentApprovedCommand, bool>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PaymentApprovedCommandHandler(IProjectRepository projectRepository)
+    public PaymentApprovedCommandHandler(IUnitOfWork unitOfWork)
     {
-        _projectRepository = projectRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<bool> Handle(PaymentApprovedCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.ProjectId);
+        var project = await _unitOfWork.Projects.GetByIdAsync(request.ProjectId);
 
         if (project is null)
             return false;
 
         project.Finish();
 
-        _projectRepository.Update(project);
+        _unitOfWork.Projects.Update(project);
 
-        return await _projectRepository.SaveChangesAsync();
+        return await _unitOfWork.SaveChangesAsync() > 0;
     }
 }

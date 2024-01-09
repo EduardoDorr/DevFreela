@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+        SA_PASSWORD: "Sequor123?"
+        ACCEPT_EULA: Y
+    ports:
+    - "1433:1433"
+    networks:
+    - devfreela-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+    networks:
+    - devfreela-network
+
+  devfreela.api:
+    image: ${DOCKER_REGISTRY-}devfreelaapi
+    build:
+      context: .\DevFreela.API
+      dockerfile: Dockerfile
+    ports:
+    - "9000:80"
+    - "9100:443"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+    networks:
+      - devfreela-network
+
+  devfreela.payments.api:
+    image: ${DOCKER_REGISTRY-}devfreelapaymentsapi
+    build:
+      context: ..\DevFreela.Payments\DevFreela.Payments.API
+      dockerfile: Dockerfile
+    ports:
+      - "9001:80"
+      - "9101:443"
+    depends_on:
+      - rabbitmq
+    networks:
+      - devfreela-network
+
+volumes:
+  sqlserver_data:
+  
+networks:
+  devfreela-network:
+    driver: bridge

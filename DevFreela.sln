@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevFreela.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevFreela.Application", "DevFreela.Application\DevFreela.Application.csproj", "{6668968D-4297-4179-B4C1-B5D7A3B9A5C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.UnitTests", "DevFreela.Test\DevFreela.UnitTests.csproj", "{6D00F558-1CDC-4357-A986-8B64C914C7E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevFreela.UnitTests", "DevFreela.Test\DevFreela.UnitTests.csproj", "{6D00F558-1CDC-4357-A986-8B64C914C7E2}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7088D466-8471-437A-A668-DAFC1BBAFEAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6D00F558-1CDC-4357-A986-8B64C914C7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D00F558-1CDC-4357-A986-8B64C914C7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D00F558-1CDC-4357-A986-8B64C914C7E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7088D466-8471-437A-A668-DAFC1BBAFEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7088D466-8471-437A-A668-DAFC1BBAFEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7088D466-8471-437A-A668-DAFC1BBAFEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7088D466-8471-437A-A668-DAFC1BBAFEAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

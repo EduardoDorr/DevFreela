@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  devfreela.api:
+    container_name: devfreela.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings__DevFreela=Server=sqlserver;Database=DevFreela;User Id=sa;Password=Sequor123?;TrustServerCertificate=True;"
+      - Services__RabbitMq__HostName=rabbitmq
+
+  devfreela.payments.api:
+    container_name: devfreela.payments.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__RabbitMq__HostName=rabbitmq

@@ -1,0 +1,31 @@
+--Create Containers
+docker run -d -p 27017:27017 --name catalog-mongo mongo
+docker run -it --rm -d -p 9000:80 --name Catalog.API studentservice
+docker run -d -p 6379:6379 --name local-redis redis
+ 
+--Start Containers
+docker start catalog-mongo
+docker start Catalog.API
+ 
+--Stop Containers
+docker stop Catalog.API
+docker stop catalog-mongo
+
+
+--Database container
+docker exec -it catalog-mongo mongosh
+docker exec -it local-redis sh
+docker
+
+(#redis-cli)
+
+
+--Docker Compose
+docker-compose up -d
+docker-compose build
+docker-compose images
+docker-compose stop
+docker-compose run
+docker-compose down
+
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d

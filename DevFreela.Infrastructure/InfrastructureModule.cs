@@ -18,6 +18,7 @@ public static class InfrastructureModule
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContexts(configuration)
+                .AddMigrations()
                 .AddRepositories()
                 .AddUnitOfWork()
                 .AddServices()
@@ -36,6 +37,17 @@ public static class InfrastructureModule
         {
             opts.UseSqlServer(connectionString);
         });
+
+        return services;
+    }
+
+    private static IServiceCollection AddMigrations(this IServiceCollection services)
+    {
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DevFreelaDbContext>();
+            db.Database.Migrate();
+        }
 
         return services;
     }
